@@ -1,3 +1,4 @@
+import Switch from './Switch'
 import Input from './Input'
 import Col from './Col'
 import Row from './Row'
@@ -10,7 +11,8 @@ var obj = {
    Row,
    Button,
    Radio,
-   Select
+   Select,
+   Switch
 }
 
 export default obj

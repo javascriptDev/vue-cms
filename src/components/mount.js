@@ -13,7 +13,7 @@ var mount = function(id, _component, data) {
             let vm = new Vue({
                 name: id.toString(),
                 data() {
-                    return data
+                    return buildData(data)
                 },
                 template: _component.template,
                 el: document.getElementById(id),
@@ -36,6 +36,48 @@ var mount = function(id, _component, data) {
 
         }, 200)
     })
+}
+
+/**
+* 判断是不是json
+* @param {[type]} text [description]
+*/
+function JSONLike(text) {
+    return /^[\],:{}\s]*$/.test(text
+        .replace(/\\["\\\/bfnrtu]/g, '@')
+        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+        .replace(/(?:^|:|,)(?:\s*\[)+/g, ''))
+}
+
+/**
+ * 转换对象
+ * @param  {[type]} source [description]
+ * @return {[type]}        [description]
+ */
+function buildData(source) {
+    let result = {}
+
+    function rec(obj, tpl) {
+        for (let k in obj) {
+            let v = obj[k]
+
+            if(typeof v === 'object') {
+                !tpl[k] && (tpl[k] = Object.prototype.toString.call(v) === '[object Object]' ? {} : [])
+                rec(obj[k], tpl[k])
+            } else {
+                if(typeof v === 'string' && v !== '') {
+                    console.log('json like')
+                    console.log(v)
+                    console.log(JSONLike(v))
+                    JSONLike(v) && (v = JSON.parse(v))
+                }
+                tpl[k] = v
+            }
+        }
+    }
+    rec(source, result)
+    console.log(result)
+    return result
 }
 
 export default mount

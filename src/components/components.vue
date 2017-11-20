@@ -235,6 +235,9 @@
                 <li draggable="true" @dragstart="dragStart" data-name="Select">
                     <el-select></el-select>
                 </li>
+                <li draggable="true" @dragstart="dragStart" data-name="Switch">
+                    <el-switch></el-switch>
+                </li>
             </ul>
         </div>
         <div v-if="activeUI==='Common'">

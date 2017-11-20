@@ -71,11 +71,11 @@ var handle = function(_attr, _slots, info) {
       },
       'v-model': {
       	type: 'text',
-      	value: 'value'
+      	value: info.id + '.value'
       },
       list: {
       	type: 'object',
-      	value: '[{value: "demo", label: "例子"}, {value: "demo1", label: "例子2"}]'
+      	value: '[{"value": "demo", "label": "例子"}, {"value": "demo1", "label": "例子2"}]'
       }
     },
     slots = {

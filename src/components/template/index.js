@@ -73,26 +73,18 @@ var getStringTypeAttr = function(attributes, componentId) {
         if (!attributes[key]) return
         try {
             let attrKey
-            let arr = ['text', 'selection', 'icon','ionicon', 'color'] //这些类型都不用加bind
+            // let arr = ['text', 'selection', 'icon','ionicon', 'color'] //这些类型都不用加bind
             let noNeedVar = [
                 'class',
                 'value',
-                'v-model',
-                'type',
-                'prefix-icon',
-                'suffix-icon',
-                'placeholder',
-                'noDataText',
-                'noMatchText'
+                'v-model'
             ]
-            if (arr.includes(attributes[key].type) || attributes[key].notBind) {
-                attrKey = key
-            } else {
-                attrKey = `:${key}`
-            }
+            attrKey = `:${key}`
             let val = `${componentId}['${key}']`
+            
             if (noNeedVar.indexOf(key) !== -1) {
                 val = attributes[key].value
+                attrKey = key
             }
             let attr = attributes[key].value ? `${attrKey}="${val}"\n` : ''
             stringAttr += attr
