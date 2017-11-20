@@ -1,0 +1,21 @@
+html::-webkit-scrollbar {
+    width: 0px
+}
+
+#placeholder {
+    min-height: 50px;
+    border: 1px dashed lightgray;
+}
+
+#placeholder.inline {
+    min-height: 50px;
+    min-width: 50px;
+    border: 1px dashed lightgray;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+.el-row, .el-col {
+	height: 40px;
+}
