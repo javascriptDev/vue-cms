@@ -217,6 +217,9 @@
         </div>
         <div v-if="activeUI === 'Element-UI'">
             <ul class="components-list">
+                <li draggable="true" @dragstart="dragStart" data-name="Form">
+                    <el-button text='表单'></el-button>
+                </li>
                 <li draggable="true" @dragstart="dragStart" data-name="Input">
                     <el-input></el-input>
                 </li>
@@ -237,6 +240,9 @@
                 </li>
                 <li draggable="true" @dragstart="dragStart" data-name="Switch">
                     <el-switch></el-switch>
+                </li>
+                <li draggable="true" @dragstart="dragStart" data-name="Slider">
+                    <el-slider></el-slider>
                 </li>
             </ul>
         </div>

@@ -5,6 +5,8 @@ import Row from './Row'
 import Button from './Button'
 import Radio from './Radio'
 import Select from './Select'
+import Slider from './Slider'
+import Form from './Form'
 var obj = {
    Input,
    Col,
@@ -12,7 +14,9 @@ var obj = {
    Button,
    Radio,
    Select,
-   Switch
+   Switch,
+   Slider,
+   Form
 }
 
 export default obj

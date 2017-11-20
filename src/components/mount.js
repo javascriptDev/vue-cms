@@ -66,9 +66,6 @@ function buildData(source) {
                 rec(obj[k], tpl[k])
             } else {
                 if(typeof v === 'string' && v !== '') {
-                    console.log('json like')
-                    console.log(v)
-                    console.log(JSONLike(v))
                     JSONLike(v) && (v = JSON.parse(v))
                 }
                 tpl[k] = v

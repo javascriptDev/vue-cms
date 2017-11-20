@@ -454,8 +454,15 @@ export default {
             // 必需，勿删，会在ondrop中被重写
         },
         getSource(components) { //预览视图中所有组件的代码
-            let code = `<template><section>`
-            components.filter(component => !component.parentId).forEach(component => {
+            let roots = components.filter(component => !component.parentId)
+
+            let script = ['<script>', 'export default {', 'data() {', ]
+
+
+            let append = ['}', '}', '<\/script>']
+            
+            let code = `${script.join('\n')} ${append.join('\n')}<template><section>`
+            roots.forEach(component => {
                 code += component.template
             })
             code += `\n</section></template>`

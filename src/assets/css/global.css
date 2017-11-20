@@ -16,6 +16,7 @@ html::-webkit-scrollbar {
 }
 
 
-.el-row, .el-col {
+.el-row, .el-col, .el-form {
 	height: 40px;
+	padding: 20px;
 }
