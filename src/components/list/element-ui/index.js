@@ -4,11 +4,17 @@ import elButton from './button.vue'
 import elRadio from './radio.vue'
 import elSelect from './select.vue'
 import elSlider from './slider.vue'
+import elTimePicker from './timepicker.vue'
+import elDatePicker from './datepicker.vue'
+import elCheckbox from './checkbox.vue'
 export default{
 	elInput,
 	elSelect,
 	elButton,
 	elRadio,
 	elSwitch,
-	elSlider
+	elSlider,
+	elTimePicker,
+	elDatePicker,
+	elCheckbox
 }

@@ -20,7 +20,7 @@
             </mu-content-block>
         </mu-paper>
         <!-- 预览视图 -->
-        <div ref="preview" v-show="previewMode==='pc'" class="preview-area" @click="clickPreview" @contextmenu="rightClick" @keyup.delete="del">
+        <div ref="preview" v-show="previewMode==='pc'" id="preview-area" class="preview-area" @click="clickPreview" @contextmenu="rightClick" @keyup.delete="del">
             <div v-if="!item.parentId" :id="item.info.id" v-for="(item,index) in components"></div>
         </div>
         <iframe src="./#/preview/mobile" class="preview-mobile" v-if="previewMode==='mobile'"></iframe>
@@ -68,7 +68,10 @@ import {
     guid,
     guidTest
 } from '@/utils/guid'
-
+import {
+    Upper,
+    JSONLike
+} from '@/utils/tools'
 export default {
     name: 'preview',
     data() {
@@ -87,7 +90,8 @@ export default {
                 position: null,
                 component: null
             },
-            previewMode: 'pc'
+            previewMode: 'pc',
+            ui: ''
         }
     },
     mounted() {
@@ -193,7 +197,9 @@ export default {
 
             let isNest = e.target.className.indexOf('preview') === -1 && e.target.id !== 'placeholder'
             let info = JSON.parse(e.dataTransfer.getData('info'))
+
             info.id = info.name + guid()
+            this.ui = info.ui
             let name = info.name //拖动的组件名字
             let component,
                 template,
@@ -453,20 +459,104 @@ export default {
         selectedSlot() {
             // 必需，勿删，会在ondrop中被重写
         },
+        /**
+         * 获取页面所需组件
+         */
+        getUsedCmp(components) {
+            let needCmps = []
+            components.forEach(cmp => {
+                cmp.template.replace(/<el-(\w+)/g, function(match, cmpName){
+                    needCmps.indexOf(cmpName) === -1 && needCmps.push(cmpName)
+                })
+            })
+            return needCmps
+        },
+        // 生成组件部分代码
+        getComponentStr(components) {
+            let needCmps = this.getUsedCmp(components)
+            if(needCmps.length > 0) {
+                return ['components: {'].concat(needCmps.map(item => `'el-${item}': ${Upper(item)},`)).concat('},')
+            } else {
+                return ['components: {', '},']
+            }
+        },
+        // 生成 import 部分代码
+        getImportStr(components) {
+            let needCmps = this.getUsedCmp(components)
+
+            if(needCmps.length > 0) {
+                return ['import ', '{'].concat(needCmps.map(item => `${Upper(item)},`)).concat(['} from \'element-ui\''])
+            } else {
+                return []
+            }
+        },
+        // 生成 script 部分代码
+        getScriptStr(components) {
+            if(this.ui !== 'Element-UI')
+                return ''
+
+            let me = this
+            // import 部分
+            let importStr = this.getImportStr(components)
+            // script开始
+            let script = ['<script>', importStr.join('\n'), 'export default {']
+            // components 部分
+            let componentsStr = this.getComponentStr(components)
+            // data 部分
+            let dataStr = ['data() ', '{', 'return {']
+            let data = {}
+            // methods
+            let methodsStr = [',', 'methods:', '{', '']
+            components.forEach(cmp => {
+                let config = me.getAllChildSettings(cmp, components)
+                Object.assign(data, config)
+            })
+
+            Object.keys(data).forEach(item => {
+                dataStr.push(`${item}: {`)
+                Object.keys(data[item]).forEach(i => {
+                    let key = i.indexOf('-') !== -1 ? `'${i}'` : i
+                    let val = data[item][i]
+                    let type = typeof val
+                    if(/^v-on:\w+$/.test(i)) {
+                        // 事件处理
+                        methodsStr.push(`${data[item][i]} () {`)
+                        methodsStr.push(data[item][data[item][i]])
+                        methodsStr.push('},')
+                        delete data[item][data[item][i]]
+                    } else {
+                        // 属性处理
+                        let prop = `${key}: '${data[item][i]}',`
+
+                        if(type === 'string' && val !== '' && JSONLike(val)) {
+                            prop = `${key}: ${data[item][i]},`
+                        }
+                        dataStr.push(prop)
+                    }
+                })
+                dataStr.push('},')
+            })
+            dataStr.push('}', '}')
+            methodsStr.push('}')
+            let appendStr = ['}', '<\/script>']
+
+            return script.concat(componentsStr).concat(dataStr).concat(methodsStr).concat(appendStr).join('\n')
+        },
         getSource(components) { //预览视图中所有组件的代码
+            let me = this
             let roots = components.filter(component => !component.parentId)
+            // script 部分代码
+            let scriptStr = this.getScriptStr(components)
 
-            let script = ['<script>', 'export default {', 'data() {', ]
-
-
-            let append = ['}', '}', '<\/script>']
-            
-            let code = `${script.join('\n')} ${append.join('\n')}<template><section>`
+            // template 部分代码
+            let code = `<template><section>`
             roots.forEach(component => {
                 code += component.template
             })
             code += `\n</section></template>`
-                //添加用户编辑的css
+            code += scriptStr
+
+            // style 部分代码
             let cssText = this.$store.state.css
             if (cssText) {
                 cssText = '\n<style scoped>\n' + cssText
@@ -474,7 +564,6 @@ export default {
                 code += cssText
             }
             code = this.$prettyDom(code)
-
             /*把组件标签中包含的用户不需要的属性删掉，
               因为它只是为了适应预览视图，
               如，组件默认的“position:fixed”会使组件跑到预览视图外
@@ -484,8 +573,7 @@ export default {
             code = code.replace(/ id=".*?"/g, '')
             code = code.replace(/ data-component-active/g, '')
             code = code.replace(/\n\n/g, '\n')
-
-            return code
+            return code.replace(/  /g, '    ')
         },
         getParentComponent(component) {
             let components = JSON.parse(JSON.stringify(this.$store.state.components))

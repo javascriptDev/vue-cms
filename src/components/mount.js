@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import preview from './preview'
+import { JSONLike } from '../utils/tools'
 //给定模板，和要挂载的元素id，挂载组件
 var mount = function(id, _component, data) {
     let components = _Vue.$store.state.components
@@ -10,6 +11,12 @@ var mount = function(id, _component, data) {
             if (component.uid) { //销毁旧实例
 
             }
+            let holder = document.getElementById(id)
+            if(!holder) {
+                let div = document.createElement('div')
+                div.id = id
+                document.getElementById('preview-area').appendChild(div)
+            }
             let vm = new Vue({
                 name: id.toString(),
                 data() {
@@ -17,9 +24,6 @@ var mount = function(id, _component, data) {
                 },
                 template: _component.template,
                 el: document.getElementById(id),
-                created() {
-                    console.log(this)
-                },
                 mounted() {
                     this.$el.id = id
                     if (component) {
@@ -36,17 +40,6 @@ var mount = function(id, _component, data) {
 
         }, 200)
     })
-}
-
-/**
-* 判断是不是json
-* @param {[type]} text [description]
-*/
-function JSONLike(text) {
-    return /^[\],:{}\s]*$/.test(text
-        .replace(/\\["\\\/bfnrtu]/g, '@')
-        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
-        .replace(/(?:^|:|,)(?:\s*\[)+/g, ''))
 }
 
 /**
@@ -73,7 +66,6 @@ function buildData(source) {
         }
     }
     rec(source, result)
-    console.log(result)
     return result
 }
 

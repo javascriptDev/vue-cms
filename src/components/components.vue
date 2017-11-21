@@ -243,6 +243,22 @@
                 </li>
                 <li draggable="true" @dragstart="dragStart" data-name="Slider">
                     <el-slider></el-slider>
+                </li><!--
+                <li draggable="true" @dragstart="dragStart" data-name="RadioGroup">
+                    <el-button text='radio-group'>
+                    </el-button>
+                </li> -->
+                <li draggable="true" @dragstart="dragStart" data-name="TimePicker">
+                    <el-time-picker>
+                    </el-time-picker>
+                </li>
+                <li draggable="true" @dragstart="dragStart" data-name="DatePicker">
+                    <el-date-picker>
+                    </el-date-picker>
+                </li>
+                <li draggable="true" @dragstart="dragStart" data-name="Checkbox">
+                    <el-checkbox>
+                    </el-checkbox>
                 </li>
             </ul>
         </div>

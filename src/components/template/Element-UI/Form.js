@@ -46,10 +46,6 @@ var handle = function(_attr, _slots, info) {
                 type: 'selection',
                 value: '',
                 items: ['', 'medium', 'small', 'mini']
-            },
-            ref: {
-                type: 'text',
-                value: info.id
             }
         },
         slots = {
@@ -57,7 +53,7 @@ var handle = function(_attr, _slots, info) {
         }
 
         //覆盖默认属性
-        Object.assign(attributes, _attr, info.id)
+        Object.assign(attributes, _attr)
         Object.assign(slots, _slots)
 
          //获取插槽模板内容

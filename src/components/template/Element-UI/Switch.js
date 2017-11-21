@@ -4,6 +4,14 @@ import elementUIICon from '../../elementUIIconList'
 var handle = function(_attr, _slots, info) {
     //定义默认属性
     let attributes = {
+            label: {
+                type: 'text',
+                value: ''
+            },
+            prop: {
+                type: 'text',
+                value: ''
+            },
             disabled: {
                 type: 'boolean',
                 value: false
@@ -42,9 +50,14 @@ var handle = function(_attr, _slots, info) {
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes, info.id)
-    let template = `<el-switch 
-                        ${stringAttr}>
-                    </el-switch>`
+    let formItemAttr = getStringTypeAttr({label: attributes.label, prop: attributes.prop}, info.id)
+
+    let template = `<el-form-item 
+                        ${formItemAttr}>
+                        <el-switch 
+                            ${stringAttr}>
+                        </el-switch>
+                    </el-form-item>`
     //删除自定义非ui属性
     return { template, attributes, slots }
 }

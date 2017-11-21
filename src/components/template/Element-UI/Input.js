@@ -3,11 +3,11 @@ import elementUIICon from '../../elementUIIconList'
 var handle = function(_attr, _slots, info) {
     //定义默认属性
     let attributes = {
-            value: {
-            	type: 'text',
-            	value: ''
-            },
-	      	placeholder: {
+			'v-model': {
+	      		type: 'text',
+	      		value: ''
+	      	},
+            placeholder: {
 	      		type: 'text',
 	      		value: ''
 	      	},
@@ -41,8 +41,8 @@ var handle = function(_attr, _slots, info) {
 	      	},
 	      	size: {
 	        	type: 'selection',
-	        	value: 'medium',
-	        	items: ['medium', 'small', 'mini']
+	        	value: '',
+	        	items: ['', 'medium', 'small', 'mini']
 	      	},
 	      	name: {
 	      		type: 'text',
@@ -54,12 +54,7 @@ var handle = function(_attr, _slots, info) {
 	      	},
 	      	rows: {
 	      		type: 'number',
-	      		value: 2
-	      	},
-	      	autoComplete: {
-	      		type: 'selection',
-	      		value: 'off',
-	      		items: ['off', 'on']
+	      		value: ''
 	      	},
 	      	form: {
 	      		type: 'text',
@@ -107,15 +102,7 @@ var handle = function(_attr, _slots, info) {
 	      		type: 'text',
 	      		value: ''
 	      	},
-	      	'v-model': {
-	      		type: 'text',
-	      		value: ''
-	      	}
-        },
-        slots = {
-        },
-        formItem = {
-        	label: {
+	      	label: {
 	      		type: 'text',
 	      		value: ''
 	      	},
@@ -123,16 +110,20 @@ var handle = function(_attr, _slots, info) {
 	      		type: 'text',
 	      		value: ''
 	      	}
-	    }
+        },
+        slots = {
+        }
 
     //覆盖默认属性
     Object.assign(attributes, _attr)
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes, info.id)
-    let formItemAttr = getStringTypeAttr(formItem, info.id)
-    let template = `<el-form-item ${formItemAttr}>
-    					<el-input>
+    let formItemAttr = getStringTypeAttr({label: attributes.label, prop: attributes.prop}, info.id)
+
+    let template = `<el-form-item 
+    					${formItemAttr}>
+    					<el-input 
   	                        ${stringAttr}>
 	                        <template slot='prepend' v-if="${info.id}.prepend">{{${info.id}.prepend}}</template>
 	                        <template slot='append' v-if="${info.id}.append">{{${info.id}.append}}</template>
@@ -140,6 +131,6 @@ var handle = function(_attr, _slots, info) {
                 	</el-form-item>`
     //删除自定义非ui属性
 
-    return { template, attributes: Object.assign(attributes, formItem), slots }
+    return { template, attributes, slots }
 }
 export default handle

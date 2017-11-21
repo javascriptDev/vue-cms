@@ -9,37 +9,41 @@ var handle = function(_attr, _slots, info) {
                 value: ''
             },
             label: {
+              type: 'text',
+              value: 'checkbox'
+            },
+            formLabel: {
                 type: 'text',
                 value: ''
             },
-            formLabel: {
+            prop: {
               type: 'text',
               value: ''
             },
-            prop: {
-                type: 'text',
-                value: ''
+            'true-label': {
+              type: 'text',
+              value: '是'
+            },
+            'false-label': {
+              type: 'text',
+              value: '否'
+            },
+            size: {
+              type: 'selection',
+              value:  '',
+              items: ['', 'medium', 'small', 'mini']
             },
             disabled: {
-      			type: 'boolean',
-      			value: false
-      		},
-      		name: {
-      			type: 'text',
-      			value: ''
-      		},
-      		border: {
-      			type: 'boolean',
-      			value: false
-      		},
-      		size: {
-      			type: 'selection',
-      			value: '',
-      			items: ['', 'medium', 'small', 'mini']
-      		},
-            text: {
-                type: 'text',
-                value: 'radio'
+              type: 'boolean',
+              value:  false
+            },
+            border: {
+              type: 'boolean',
+              value:  false
+            },
+            name: {
+              type: 'text',
+              value: ''
             }
         },
         slots = {
@@ -56,10 +60,9 @@ var handle = function(_attr, _slots, info) {
                         label="${attributes.formLabel.value}"
                         prop="${attributes.prop.value}"
                         >
-                        <el-radio 
+                        <el-checkbox 
                             ${stringAttr}>
-                            {{${info.id}.text}}
-                        </el-radio>
+                        </el-checkbox>
                     </el-form-item>`
     //删除自定义非ui属性
     return { template, attributes, slots }

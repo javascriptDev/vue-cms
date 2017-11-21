@@ -9,7 +9,7 @@
             }-->
         <div v-if="attr" v-for="(v,k,i) in attr">
             <!-- 文本型（text）属性 -->
-            <mu-text-field v-if="['object', 'text'].indexOf(v.type) !== -1" :label="v.key || k" :name="k" v-model="v.value" @input.native="updateAttribute($event, k, true)" type="text" fullWidth/>
+            <mu-text-field v-if="['object', 'text', 'function'].indexOf(v.type) !== -1" :label="v.key || k" :name="k" v-model="v.value" @input.native="updateAttribute($event, k, true)" type="text" fullWidth/>
             <!-- 数字型（number）属性 -->
             <mu-text-field v-if="v.type==='number'" :label="v.key || k" :name="k" v-model="v.value" @input.native="updateAttribute($event, k, true)" type="number" fullWidth/>
             <!-- 滑块型 -->

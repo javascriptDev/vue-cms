@@ -44,7 +44,15 @@ var handle = function(_attr, _slots, info) {
             text: {
                 type: 'text',
                 value: '按钮'
-            }
+            },
+            'v-on:click': {
+                type: 'text',
+                value: 'click'
+            },
+            'click': {
+                type: 'function',
+                value: 'alert(3)'
+            },
         },
         slots = {
             default: []

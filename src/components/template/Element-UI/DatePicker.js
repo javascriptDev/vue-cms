@@ -4,50 +4,57 @@ import elementUIICon from '../../elementUIIconList'
 var handle = function(_attr, _slots, info) {
     //定义默认属性
     let attributes = {
-            label: {
+            'v-model': {
                 type: 'text',
                 value: ''
+            },
+            formLabel: {
+                type: 'text',
+                value: '日期'
             },
             prop: {
                 type: 'text',
                 value: ''
             },
-            min: {
-                type: 'number',
-                value: ''
+            type: {
+                type: 'selection',
+                value:  '',
+                items: ['', 'year', 'month', 'date', 'week', 'datetime', 'datetimerange', 'daterange']
             },
-            max: {
-                type: 'number',
-                value: ''
+            placeholder: {
+                type: 'text',
+                value: '选择日期'
+            },
+            readonly: {
+                type: 'boolean',
+                value:  false
             },
             disabled: {
                 type: 'boolean',
                 value:  false
             },
-            step: {
-                type: 'number',
-                value: ''
-            },
-            'show-input': {
+            clearable: {
                 type: 'boolean',
                 value:  false
             },
-            'show-stops':  {
-                type: 'boolean',
-                value:  false
-            },
-            range: {
-                type: 'boolean',
-                value:  false
-            },
-            vertical: {
-                type: 'boolean',
-                value:  false
-            },
-            height: {
+            'range-separator': {
                 type: 'text',
-                value: ''
+                value: '',
+                key: '范围分隔符'
+            },
+            format: {
+                type: 'text',
+                value: 'yyyy-MM-dd'
+            },
+            'on-change': {
+                type: 'text',
+                value: 'change'
+            },
+            change: {
+                type: 'function',
+                value: `alert(3)`
             }
+
         },
         slots = {
             default: []
@@ -58,13 +65,14 @@ var handle = function(_attr, _slots, info) {
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes, info.id)
-    let formItemAttr = getStringTypeAttr({label: attributes.label, prop: attributes.prop}, info.id)
 
     let template = `<el-form-item 
-                        ${formItemAttr}>
-                        <el-slider 
+                        label="${attributes.formLabel.value}"
+                        prop="${attributes.prop.value}"
+                        >
+                        <el-date-picker 
                             ${stringAttr}>
-                        </el-slider>
+                        </el-date-picker>
                     </el-form-item>`
     //删除自定义非ui属性
     return { template, attributes, slots }

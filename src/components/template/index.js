@@ -77,11 +77,14 @@ var getStringTypeAttr = function(attributes, componentId) {
             let noNeedVar = [
                 'class',
                 'value',
-                'v-model'
+                'v-model',
+                'format',
+                'on-change',
+                'v-on:click'
             ]
             attrKey = `:${key}`
             let val = `${componentId}['${key}']`
-            
+
             if (noNeedVar.indexOf(key) !== -1) {
                 val = attributes[key].value
                 attrKey = key

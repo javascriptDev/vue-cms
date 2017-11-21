@@ -8,39 +8,36 @@ var handle = function(_attr, _slots, info) {
                 type: 'text',
                 value: ''
             },
-            label: {
-                type: 'text',
-                value: ''
-            },
             formLabel: {
-              type: 'text',
-              value: ''
+                type: 'text',
+                value: '时间'
             },
             prop: {
                 type: 'text',
                 value: ''
             },
+            readonly: {
+                type: 'boolean',
+                value:  false
+            },
             disabled: {
-      			type: 'boolean',
-      			value: false
-      		},
-      		name: {
-      			type: 'text',
-      			value: ''
-      		},
-      		border: {
-      			type: 'boolean',
-      			value: false
-      		},
-      		size: {
-      			type: 'selection',
-      			value: '',
-      			items: ['', 'medium', 'small', 'mini']
-      		},
-            text: {
+                type: 'boolean',
+                value:  false
+            },
+            'is-range': {
+                type: 'boolean',
+                value:  false
+            },
+            'range-separator': {
                 type: 'text',
-                value: 'radio'
-            }
+                value: '',
+                key: '范围分隔符'
+            },
+            format: {
+                type: 'text',
+                value: 'HH:mm:ss'
+            },
+
         },
         slots = {
             default: []
@@ -56,10 +53,10 @@ var handle = function(_attr, _slots, info) {
                         label="${attributes.formLabel.value}"
                         prop="${attributes.prop.value}"
                         >
-                        <el-radio 
+                        <el-time-picker 
                             ${stringAttr}>
                             {{${info.id}.text}}
-                        </el-radio>
+                        </el-time-picker>
                     </el-form-item>`
     //删除自定义非ui属性
     return { template, attributes, slots }
