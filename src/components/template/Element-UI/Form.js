@@ -8,7 +8,8 @@ var handle = function(_attr, _slots, info) {
                 value: JSON.stringify({
                     name: '',
                     age: ''
-                })
+                }),
+                bind: true
             },
             rules: {
                 type: 'object',
@@ -19,28 +20,39 @@ var handle = function(_attr, _slots, info) {
                     "age": [
                         { "required": true, "message": "请输入姓名", "trigger": 'blur' }
                     ]
-                })
+                }),
+                bind: true
             },
             inline: {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             'label-position': {
                 type: 'selection',
-                value: '',
-                items: ['' ,'right', 'left', 'top']
+                value: 'left',
+                default: 'left',
+                items: ['right', 'left', 'top'],
+                isDefault: true
             },
             'label-width': {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             'inline-message': {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             'status-icon': {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             size: {
                 type: 'selection',

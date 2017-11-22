@@ -65,29 +65,33 @@ var getSlotContent = function(slots) {
     })
     return inner
 }
-var getStringTypeAttr = function(attributes, componentId) {
+/**
+ * 获取组件属性列表
+ * @param  { object} attributes  组建的配置属性
+ * @param  { string} componentId 组件 id
+ * @param  {boolean} ignore      是否忽略配置属性中的 rm 字段.用于屏蔽某些属性,不显示在组件的属性内.
+ * @return {[type]}             [description]
+ */
+var getStringTypeAttr = function(attributes, componentId, ignore) {
 
     // value为空的不添加到模板中
     let stringAttr = ''
     Object.keys(attributes).forEach(key => {
-        if (!attributes[key]) return
-        try {
-            let attrKey
-            // let arr = ['text', 'selection', 'icon','ionicon', 'color'] //这些类型都不用加bind
-            let noNeedVar = [
-                'class',
-                'value',
-                'v-model',
-                'format',
-                'on-change',
-                'v-on:click'
-            ]
-            attrKey = `:${key}`
-            let val = `${componentId}['${key}']`
+        // 属性值为空, 属性值是默认值没有变过,属性值标识为要删除.
+        if (!attributes[key] || attributes[key].isDefault || (!ignore && attributes[key].rm)) return
 
-            if (noNeedVar.indexOf(key) !== -1) {
-                val = attributes[key].value
-                attrKey = key
+        try {
+            let attrKey = key
+            let val = attributes[key].value
+
+            if (attributes[key].bind) {
+                val = `${componentId}['${key}']`
+                attrKey = `:${key}`
+            }
+
+            // 如果是事件,需要替换成 methods. 因为在生成代码的时候,会把事件处理的函数直接放到 methods 下.
+            if (/^v-on:[a-zA-Z]+$/.test(key)) {
+                val = `${componentId}_${key.split(':')[1]}`
             }
             let attr = attributes[key].value ? `${attrKey}="${val}"\n` : ''
             stringAttr += attr

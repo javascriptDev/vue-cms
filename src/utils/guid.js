@@ -9,5 +9,5 @@ export const guid =  () => { //获取随机ID，组件拖到预览视图后就�
 
 // 检测是否id 合法
 export const guidTest = (id) => {
-	return /0\w{8}/.test(id)
+	return /^C\d+$/.test(id)
 }

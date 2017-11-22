@@ -10,7 +10,8 @@ var handle = function(_attr, _slots, info) {
             },
             formLabel: {
                 type: 'text',
-                value: '日期'
+                value: '日期',
+                key: '表单 label'
             },
             prop: {
                 type: 'text',
@@ -46,7 +47,7 @@ var handle = function(_attr, _slots, info) {
                 type: 'text',
                 value: 'yyyy-MM-dd'
             },
-            'on-change': {
+            'v-on:change': {
                 type: 'text',
                 value: 'change'
             },

@@ -6,44 +6,68 @@ var handle = function(_attr, _slots, info) {
     let attributes = {
             'v-model': {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             label: {
-              type: 'text',
-              value: 'checkbox'
+                type: 'text',
+                value: '',
+                default: '',
+                isDefault: true,
+                bind: true
             },
             formLabel: {
                 type: 'text',
-                value: ''
+                value: '',
+                key: '表单 label',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             prop: {
               type: 'text',
-              value: ''
+              value: '',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             'true-label': {
-              type: 'text',
-              value: '是'
+                type: 'text',
+                value: '是',
+                default: '是',
+                isDefault: true
             },
             'false-label': {
-              type: 'text',
-              value: '否'
+                type: 'text',
+                value: '否',
+                default: '否',
+                isDefault: true
             },
             size: {
-              type: 'selection',
-              value:  '',
-              items: ['', 'medium', 'small', 'mini']
+                type: 'selection',
+                value:  'medium',
+                items: ['medium', 'small', 'mini'],
+                default: 'medium',
+                isDefault: true
             },
             disabled: {
-              type: 'boolean',
-              value:  false
+                type: 'boolean',
+                value:  false,
+                default: false,
+                isDefault: true
             },
             border: {
-              type: 'boolean',
-              value:  false
+                type: 'boolean',
+                value:  false,
+                default: false,
+                isDefault: true
             },
             name: {
-              type: 'text',
-              value: ''
+                type: 'text',
+                value: '',
+                default: '',
+                isDefault: true
             }
         },
         slots = {
@@ -55,10 +79,10 @@ var handle = function(_attr, _slots, info) {
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes, info.id)
+    let formItemAttr = getStringTypeAttr({label: attributes.formLabel, prop: attributes.prop}, info.id, true)
 
     let template = `<el-form-item 
-                        label="${attributes.formLabel.value}"
-                        prop="${attributes.prop.value}"
+                        ${formItemAttr}
                         >
                         <el-checkbox 
                             ${stringAttr}>

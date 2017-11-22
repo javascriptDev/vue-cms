@@ -198,7 +198,7 @@ export default {
             let isNest = e.target.className.indexOf('preview') === -1 && e.target.id !== 'placeholder'
             let info = JSON.parse(e.dataTransfer.getData('info'))
 
-            info.id = info.name + guid()
+            info.id = 'C' + this.components.length //guid()
             this.ui = info.ui
             let name = info.name //拖动的组件名字
             let component,
@@ -465,7 +465,8 @@ export default {
         getUsedCmp(components) {
             let needCmps = []
             components.forEach(cmp => {
-                cmp.template.replace(/<el-(\w+)/g, function(match, cmpName){
+                console.log(cmp.template)
+                cmp.template.replace(/<el-(\S+[-a-zA-Z+])/g, function(match, cmpName){
                     needCmps.indexOf(cmpName) === -1 && needCmps.push(cmpName)
                 })
             })
@@ -490,6 +491,36 @@ export default {
                 return []
             }
         },
+        getAllChildTemplateProps(parent, components) {
+            let result = {}
+            function getAll (parentCmp) {
+                let hasChild = false
+                Object.keys(parentCmp.slots).forEach(c => {
+                    if (parentCmp.slots[c].length > 0) {
+                        hasChild = true
+                        parentCmp.slots[c].forEach(item => {
+                            if (!item) return
+                            let child = components.find(cmp => cmp.info.id === item.id)
+                            result[child.info.id] = child.attributes
+                            getAll(child)
+                        })
+                    }
+                })
+                if(!hasChild) {
+                    result[parent.info.id] = parent.attributes
+                }
+            }
+            getAll(parent)
+            let data = {}
+
+            Object.keys(result).forEach(key => {
+                data[key] = {}
+                Object.keys(result[key]).forEach(item => {
+                    data[key][item] = result[key][item].value
+                })
+            })
+            return data
+        },
         // 生成 script 部分代码
         getScriptStr(components) {
             if(this.ui !== 'Element-UI')
@@ -504,32 +535,38 @@ export default {
             let componentsStr = this.getComponentStr(components)
             // data 部分
             let dataStr = ['data() ', '{', 'return {']
-            let data = {}
+            let ComponentSettings = {}
             // methods
             let methodsStr = [',', 'methods:', '{', '']
             components.forEach(cmp => {
-                let config = me.getAllChildSettings(cmp, components)
-                Object.assign(data, config)
+                let config = me.getAllChildTemplateProps(cmp, components)
+                Object.assign(ComponentSettings, config)
             })
 
-            Object.keys(data).forEach(item => {
-                dataStr.push(`${item}: {`)
-                Object.keys(data[item]).forEach(i => {
+            Object.keys(ComponentSettings).forEach(ComponentId => {
+                dataStr.push(`${ComponentId}: {`)
+                Object.keys(ComponentSettings[ComponentId]).forEach(i => {
                     let key = i.indexOf('-') !== -1 ? `'${i}'` : i
-                    let val = data[item][i]
+                    let val = ComponentSettings[ComponentId][i]
                     let type = typeof val
-                    if(/^v-on:\w+$/.test(i)) {
+                    if(/^v-on:[a-zA-Z]+$/.test(i)) {
                         // 事件处理
-                        methodsStr.push(`${data[item][i]} () {`)
-                        methodsStr.push(data[item][data[item][i]])
+
+                        if(!val)
+                            return
+
+                        methodsStr.push(`${ComponentId}_${i.split(':')[1]} () {`)
+                        methodsStr.push(val)
                         methodsStr.push('},')
-                        delete data[item][data[item][i]]
                     } else {
                         // 属性处理
-                        let prop = `${key}: '${data[item][i]}',`
+                        if(['', undefined].indexOf(val) !== -1)
+                            return
 
-                        if(type === 'string' && val !== '' && JSONLike(val)) {
-                            prop = `${key}: ${data[item][i]},`
+                        let prop = `${key}: '${ComponentSettings[ComponentId][i]}',`
+
+                        if((type === 'string' && val !== '' && JSONLike(val)) || (['number', 'boolean'].indexOf(type) !== -1)) {
+                            prop = `${key}: ${ComponentSettings[ComponentId][i]},`
                         }
                         dataStr.push(prop)
                     }
@@ -568,12 +605,19 @@ export default {
               因为它只是为了适应预览视图，
               如，组件默认的“position:fixed”会使组件跑到预览视图外
             */
-            code = code.replace(/ style=".*?"/g, '')
-            code = code.replace(/ tabIndex=".*?"/g, '')
-            code = code.replace(/ id=".*?"/g, '')
-            code = code.replace(/ data-component-active/g, '')
-            code = code.replace(/\n\n/g, '\n')
-            return code.replace(/  /g, '    ')
+            let rmAttributes = [
+                / style=".*?"/g,
+                / tabIndex=".*?"/g,
+                / id=".*?"/g,
+                / data-component-active/g,
+                / :click=".*?"/g
+
+            ]
+            rmAttributes.forEach(attr => {
+                code = code.replace(attr, '')
+            })
+
+            return code.replace(/\n\n/g, '\n').replace(/  /g, '    ')
         },
         getParentComponent(component) {
             let components = JSON.parse(JSON.stringify(this.$store.state.components))

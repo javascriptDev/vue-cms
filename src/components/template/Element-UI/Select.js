@@ -8,6 +8,10 @@ import elementUIICon from '../../elementUIIconList'
 var handle = function(_attr, _slots, info) {
     //定义默认属性
     let attributes = {
+            'v-model': {
+                type: 'text',
+                value: ''
+            },
             label: {
                 type: 'text',
                 value: ''
@@ -76,10 +80,6 @@ var handle = function(_attr, _slots, info) {
                 type: 'boolean',
                 value: false,
                 key: '多选且可搜索时，是否在选中一个选项后保留当前的搜索关键词'
-            },
-            'v-model': {
-                type: 'text',
-                value: ''
             },
             list: {
                 type: 'object',

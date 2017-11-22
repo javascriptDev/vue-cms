@@ -73,7 +73,11 @@ export default {
 
         },
         updateAttribute(event, key, isNative) { //提交更新到父组件
-            this.attr[key].value = isNative ? event.target.value : event
+            let val = isNative ? event.target.value : event
+            this.attr[key].value = val
+            if(this.attr[key].isDefault !== undefined){
+                this.attr[key].isDefault = val === this.attr[key].default
+            }
             if (this.keyOfAttr)
                 this.$emit('update', {
                     [this.keyOfAttr]: {

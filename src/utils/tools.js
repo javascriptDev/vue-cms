@@ -12,5 +12,9 @@ export const JSONLike = (text) => {
  * 首字母大写
  */
 export const Upper = (text) => {
-	return text.substr(0,1).toUpperCase() + text.substr(1)
+	if (text.indexOf('-') !== -1) {
+		return text.split('-').map(item => Upper(item)).join('')
+	} else {
+		return text.substr(0,1).toUpperCase() + text.substr(1)
+	}
 }
