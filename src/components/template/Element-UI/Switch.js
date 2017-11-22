@@ -4,41 +4,55 @@ import elementUIICon from '../../elementUIIconList'
 var handle = function(_attr, _slots, info) {
     //定义默认属性
     let attributes = {
+            'v-model': {
+                type: 'text',
+                value: '',
+                default: '',
+                isDefault: true
+            },
             label: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             prop: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             disabled: {
                 type: 'boolean',
-                value: false
+                value: false,
+                default: false,
+                isDefault: true
             },
             'active-icon-class': {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             'active-text': {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             'inactive-text': {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             name: {
                 type: 'text',
-                value: ''
-            },
-            'v-model': {
-                type: 'text',
-                value: info.id + '.value'
-            },
-            value: {
-                type: 'boolean',
-                value: false
+                value: '',
+                default: '',
+                isDefault: true
             }
         },
         slots = {
@@ -50,7 +64,7 @@ var handle = function(_attr, _slots, info) {
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes, info.id)
-    let formItemAttr = getStringTypeAttr({label: attributes.label, prop: attributes.prop}, info.id)
+    let formItemAttr = getStringTypeAttr({label: attributes.label, prop: attributes.prop}, info.id, true)
 
     let template = `<el-form-item 
                         ${formItemAttr}>

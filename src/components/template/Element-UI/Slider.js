@@ -4,49 +4,79 @@ import elementUIICon from '../../elementUIIconList'
 var handle = function(_attr, _slots, info) {
     //定义默认属性
     let attributes = {
+            'v-model': {
+                type: 'text',
+                value: '',
+                default: '',
+                isDefault: true
+            },
             label: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             prop: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             min: {
                 type: 'number',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             max: {
                 type: 'number',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             disabled: {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             step: {
                 type: 'number',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             'show-input': {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             'show-stops':  {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             range: {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             vertical: {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             height: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             }
         },
         slots = {
@@ -58,7 +88,7 @@ var handle = function(_attr, _slots, info) {
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes, info.id)
-    let formItemAttr = getStringTypeAttr({label: attributes.label, prop: attributes.prop}, info.id)
+    let formItemAttr = getStringTypeAttr({label: attributes.label, prop: attributes.prop}, info.id, true)
 
     let template = `<el-form-item 
                         ${formItemAttr}>

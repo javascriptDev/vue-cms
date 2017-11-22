@@ -10,80 +10,112 @@ var handle = function(_attr, _slots, info) {
     let attributes = {
             'v-model': {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             label: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                rm: true,
+                isDefault: true
             },
             prop: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             name: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             id: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             size: {
                 type: 'selection',
-                value: '',
-                items: ['', 'large', 'mini', 'small']
+                value: 'large',
+                items: ['large', 'mini', 'small'],
+                default: 'large',
+                isDefault: true
             },
             disabled: {
                 type: 'boolean',
-                value: false
+                value: false,
+                default: false,
+                isDefault: true
             },
             clearable: {
                 type: 'boolean',
-                value: false
+                value: false,
+                default: false,
+                isDefault: true
             },
             filterable: {
                 type: 'boolean',
-                value: false
+                value: false,
+                default: false,
+                isDefault: true
             },
             loading: {
                 type: 'boolean',
-                value: false
+                value: false,
+                default: false,
+                isDefault: true
             },
             popperClass: {
                 type: 'text',
                 value: '',
-                key: '下拉框的类名'
+                key: '下拉框的类名',
+                default: '',
+                isDefault: true
             },
             noMatchText: {
                 type: 'text',
                 value: '无匹配',
-                key: '搜索条件无匹配时显示的文字'
+                key: '搜索条件无匹配时显示的文字',
+                default: '无匹配',
+                isDefault: true
             },
             noDataText: {
                 type: 'text',
-                value: '无数据'
+                value: '无数据',
+                default: '无数据',
+                isDefault: true
             },
             multiple: {
                 type: 'boolean',
-                value: false
+                value: false,
+                default: false,
+                isDefault: true
             },
             multipleLimit: {
                 type: 'number',
-                value: 0,
-                key: '多选时用户最多可以选择的项目数'
+                value: '',
+                key: '多选时用户最多可以选择的项目数',
+                default: '',
+                isDefault: true
             },
             placeholder: {
                 type: 'text',
-                value: '请选择'
-            },
-            reserveKeyword: {
-                type: 'boolean',
-                value: false,
-                key: '多选且可搜索时，是否在选中一个选项后保留当前的搜索关键词'
+                value: '请选择',
+                default: '请选择',
+                isDefault: true
             },
             list: {
                 type: 'object',
-                value: '[{"value": "demo", "label": "例子"}, {"value": "demo1", "label": "例子2"}]'
+                value: '[{"value": "demo", "label": "例子"}, {"value": "demo1", "label": "例子2"}]',
+                default: '',
+                bind: true,
+                isDefault: true
             }
         },
         slots = {
@@ -98,7 +130,7 @@ var handle = function(_attr, _slots, info) {
     let formItemAttr = getStringTypeAttr({
         label: attributes.label,
         prop: attributes.prop
-    }, info.id)
+    }, info.id, true)
 
     let template = `<el-form-item 
                         ${formItemAttr}>

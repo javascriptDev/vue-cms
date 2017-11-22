@@ -6,37 +6,62 @@ var handle = function(_attr, _slots, info) {
     let attributes = {
             'v-model': {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             formLabel: {
                 type: 'text',
-                value: '时间'
+                value: '',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             prop: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true,
+                rm: true
+            },
+            placeholder: {
+                type: 'text',
+                value: '选择时间',
+                default: '选择时间',
+                isDefault: true
             },
             readonly: {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             disabled: {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             'is-range': {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             'range-separator': {
                 type: 'text',
                 value: '',
-                key: '范围分隔符'
+                key: '范围分隔符',
+                default: '',
+                isDefault: true
             },
             format: {
-                type: 'text',
-                value: 'HH:mm:ss'
-            },
+                type: 'selection',
+                value: '',
+                items: ['', 'HH:mm:ss', 'HH-mm-ss'],
+                default: '',
+                isDefault: true
+            }
 
         },
         slots = {
@@ -48,14 +73,12 @@ var handle = function(_attr, _slots, info) {
 
     //字符串模板操作
     let stringAttr = getStringTypeAttr(attributes, info.id)
+    let formItemAttr = getStringTypeAttr({label: attributes.formLabel, prop: attributes.prop}, info.id, true)
 
     let template = `<el-form-item 
-                        label="${attributes.formLabel.value}"
-                        prop="${attributes.prop.value}"
-                        >
+                        ${formItemAttr}>
                         <el-time-picker 
                             ${stringAttr}>
-                            {{${info.id}.text}}
                         </el-time-picker>
                     </el-form-item>`
     //删除自定义非ui属性

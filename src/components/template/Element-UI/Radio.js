@@ -6,40 +6,60 @@ var handle = function(_attr, _slots, info) {
     let attributes = {
             'v-model': {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             label: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             formLabel: {
-              type: 'text',
-              value: ''
+                type: 'text',
+                value: '',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             prop: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                rm: true,
+                isDefault: true
             },
             disabled: {
       			type: 'boolean',
-      			value: false
+      			value: false,
+                default: false,
+                isDefault: true
       		},
       		name: {
       			type: 'text',
-      			value: ''
+      			value: '',
+                default: '',
+                isDefault: true
       		},
       		border: {
       			type: 'boolean',
-      			value: false
+      			value: false,
+                default: false,
+                isDefault: true
       		},
       		size: {
       			type: 'selection',
-      			value: '',
-      			items: ['', 'medium', 'small', 'mini']
+      			value: 'medium',
+      			items: ['medium', 'small', 'mini'],
+                default: 'medium',
+                isDefault: true
       		},
             text: {
                 type: 'text',
-                value: 'radio'
+                value: '',
+                default: '',
+                isDefault: true
             }
         },
         slots = {
