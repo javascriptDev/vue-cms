@@ -260,6 +260,14 @@
                     <el-checkbox>
                     </el-checkbox>
                 </li>
+                <li draggable="true" @dragstart="dragStart" data-name="Table">
+                    <el-table>
+                    </el-table>
+                </li>
+                <li draggable="true" @dragstart="dragStart" data-name="Pagination">
+                    <el-pagination>
+                    </el-pagination>
+                </li>
             </ul>
         </div>
         <div v-if="activeUI==='Common'">

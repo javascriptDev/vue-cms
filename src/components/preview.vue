@@ -549,13 +549,13 @@ export default {
                     let key = i.indexOf('-') !== -1 ? `'${i}'` : i
                     let val = ComponentSettings[ComponentId][i]
                     let type = typeof val
-                    if(/^v-on:[a-zA-Z]+$/.test(i)) {
+                    if(/^v-on:[a-zA-Z-]+$/.test(i)) {
                         // 事件处理
 
                         if(!val)
                             return
 
-                        methodsStr.push(`${ComponentId}_${i.split(':')[1]} () {`)
+                        methodsStr.push(`${ComponentId}_${i.split(':')[1].replace(/-/g, '_')} () {`)
                         methodsStr.push(val)
                         methodsStr.push('},')
                     } else {

@@ -70,12 +70,11 @@ var handle = function(_attr, _slots, info) {
     Object.assign(attributes, _attr)
 
     //字符串模板操作
-    let stringAttr = getStringTypeAttr(attributes, info.id)
+    let stringAttr = getStringTypeAttr(attributes, info.id, true)
+    let formItemAttr = getStringTypeAttr({label: attributes.label, prop: attributes.prop}, info.id)
 
     let template = `<el-form-item 
-                        label="${attributes.formLabel.value}"
-                        prop="${attributes.prop.value}"
-                        >
+                       ${formItemAttr}>
                         <el-radio 
                             ${stringAttr}>
                             {{${info.id}.text}}

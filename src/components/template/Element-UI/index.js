@@ -11,6 +11,8 @@ import RadioGroup from './RadioGroup'
 import TimePicker from './Timepicker'
 import DatePicker from './Datepicker'
 import Checkbox from './Checkbox'
+import Table from './Table'
+import Pagination from './Pagination'
 var obj = {
     Input,
     Col,
@@ -24,7 +26,9 @@ var obj = {
     RadioGroup,
     TimePicker,
     DatePicker,
-    Checkbox
+    Checkbox,
+    Table,
+    Pagination
 }
 
 export default obj

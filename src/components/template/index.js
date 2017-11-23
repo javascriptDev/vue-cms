@@ -78,7 +78,7 @@ var getStringTypeAttr = function(attributes, componentId, ignore) {
     let stringAttr = ''
     Object.keys(attributes).forEach(key => {
         // 属性值为空, 属性值是默认值没有变过,属性值标识为要删除.
-        if (!attributes[key] || attributes[key].isDefault || (!ignore && attributes[key].rm)) return
+        if (!attributes[key] || attributes[key].isDefault || (ignore && attributes[key].rm)) return
 
         try {
             let attrKey = key
@@ -90,8 +90,8 @@ var getStringTypeAttr = function(attributes, componentId, ignore) {
             }
 
             // 如果是事件,需要替换成 methods. 因为在生成代码的时候,会把事件处理的函数直接放到 methods 下.
-            if (/^v-on:[a-zA-Z]+$/.test(key)) {
-                val = `${componentId}_${key.split(':')[1]}`
+            if (/^v-on:[a-zA-Z-]+$/.test(key)) {
+                val = `${componentId}_${key.split(':')[1].replace(/-/g, '_')}`
             }
             let attr = attributes[key].value ? `${attrKey}="${val}"\n` : ''
             stringAttr += attr

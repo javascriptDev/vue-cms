@@ -6,54 +6,74 @@ var handle = function(_attr, _slots, info) {
     let attributes = {
             'v-model': {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true
             },
             formLabel: {
                 type: 'text',
-                value: '日期',
-                key: '表单 label'
+                value: '',
+                key: '表单 label',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             prop: {
                 type: 'text',
-                value: ''
+                value: '',
+                default: '',
+                isDefault: true,
+                rm: true
             },
             type: {
                 type: 'selection',
                 value:  '',
-                items: ['', 'year', 'month', 'date', 'week', 'datetime', 'datetimerange', 'daterange']
+                items: ['', 'year', 'month', 'date', 'week', 'datetime', 'datetimerange', 'daterange'],
+                default: '',
+                isDefault: true
             },
             placeholder: {
                 type: 'text',
-                value: '选择日期'
+                value: '选择日期',
+                default: '',
+                isDefault: false
             },
             readonly: {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             disabled: {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             clearable: {
                 type: 'boolean',
-                value:  false
+                value:  false,
+                default: false,
+                isDefault: true
             },
             'range-separator': {
                 type: 'text',
                 value: '',
-                key: '范围分隔符'
+                key: '范围分隔符',
+                default: '',
+                isDefault: true
             },
             format: {
                 type: 'text',
-                value: 'yyyy-MM-dd'
+                value: 'yyyy-MM-dd',
+                default: '',
+                isDefault: true
             },
             'v-on:change': {
                 type: 'text',
-                value: 'change'
-            },
-            change: {
-                type: 'function',
-                value: `alert(3)`
+                value: '',
+                default: '',
+                isDefault: true
             }
 
         },
@@ -65,12 +85,11 @@ var handle = function(_attr, _slots, info) {
     Object.assign(attributes, _attr)
 
     //字符串模板操作
-    let stringAttr = getStringTypeAttr(attributes, info.id)
+    let stringAttr = getStringTypeAttr(attributes, info.id, true)
+    let formItemAttr = getStringTypeAttr({label: attributes.formLabel, prop: attributes.prop}, info.id)
 
     let template = `<el-form-item 
-                        label="${attributes.formLabel.value}"
-                        prop="${attributes.prop.value}"
-                        >
+                        ${formItemAttr}>
                         <el-date-picker 
                             ${stringAttr}>
                         </el-date-picker>

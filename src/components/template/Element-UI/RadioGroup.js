@@ -29,7 +29,7 @@ var handle = function(_attr, _slots, info) {
     Object.assign(attributes, _attr)
 
     //字符串模板操作
-    let stringAttr = getStringTypeAttr(attributes, info.id)
+    let stringAttr = getStringTypeAttr(attributes, info.id, true)
     let formItemAttr = getStringTypeAttr({
         label: attributes.label,
         prop: attributes.prop

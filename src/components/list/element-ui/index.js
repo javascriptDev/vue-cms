@@ -7,6 +7,8 @@ import elSlider from './slider.vue'
 import elTimePicker from './timepicker.vue'
 import elDatePicker from './datepicker.vue'
 import elCheckbox from './checkbox.vue'
+import elTable from './table.vue'
+import elPagination from './pagination.vue'
 export default{
 	elInput,
 	elSelect,
@@ -16,5 +18,7 @@ export default{
 	elSlider,
 	elTimePicker,
 	elDatePicker,
-	elCheckbox
+	elCheckbox,
+	elTable,
+	elPagination
 }
