@@ -1,3 +1,6 @@
 <template>
-	<div>表格设计</div>
+	<div>
+		<mu-appbar title="Element-UI　表格生成器">
+		</mu-appbar>
+	</div>
 </template>

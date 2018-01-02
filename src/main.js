@@ -17,7 +17,6 @@ Vue.use(Element)
 //iView-UI
 import iView from 'iview'
 Vue.use(iView)
-
 //Mint-UI
 import { Toast, Indicator } from 'mint-ui'
 import 'mint-ui/lib/style.css'

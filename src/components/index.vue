@@ -7,7 +7,7 @@
 			<router-link :to="{name: 'main'}">页面设计器</router-link>
 		 </mu-paper>
 		 <mu-paper class="block" :zDepth="2" >
-		 	<router-link :to="{name: 'formDesign'}">表单设计器</router-link>
+		 	<router-link :to="{name: 'formDesign'}">表单验证生成器</router-link>
 		 </mu-paper>
 		 <mu-paper class="block" :zDepth="2" >
 		 	<router-link :to="{name: 'tableDesign'}">表格设计器</router-link>
