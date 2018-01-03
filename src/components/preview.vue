@@ -600,6 +600,7 @@ export default {
                 cssText += '\n</style>\n'
                 code += cssText
             }
+            console.log(code)
             code = this.$prettyDom(code)
             /*把组件标签中包含的用户不需要的属性删掉，
               因为它只是为了适应预览视图，

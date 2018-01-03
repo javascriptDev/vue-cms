@@ -54,19 +54,20 @@
 				let rules = this.rules.map(item => {
 					return me.generateRule(item, preFunc)
 				})
-				console.log(rules)
-				return `
-	<script>
-		export default {
-			data () {
-				${preFunc.join('')}
-				return {
-					rules: {${this.convert(rules)}
-					}
-				}
-			}
-		}
-	<\/script>`
+				let result = this.convert(rules).join('\n')
+				let str = `
+					<script>
+						export default {
+							data () {
+								${preFunc.join('')}
+								return {
+									rules: ${result}
+									}
+								}
+							}
+						}
+					<\/script>`
+				return this.$prettyDom(str).replace(/\n\n/g, '\n').replace(/  /g, '    ')
 			},
 			/**
 			 * 生成单个规则
@@ -123,12 +124,9 @@
 			convert (object, layer = 5) {
 				let space = '    '
 				let result = []
-				object.forEach(rule => {
-					result.push(`
-						${rule.field}: [
-							{type: }
-						]
-					`)
+				let me = this
+				return object.map(rule => {
+					return JSON.stringify(rule)
 				})
 			}
 		}
