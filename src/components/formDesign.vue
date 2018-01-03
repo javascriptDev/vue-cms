@@ -12,8 +12,10 @@
 				<mu-appbar title="设计器">	</mu-appbar>
 				<div>
 					<el-button type="success" icon='el-icon-plus' @click='addField'>添加字段</el-button>
+					<el-button type="info" icon='el-icon-plus' @click='test'>测试</el-button>
+
 					<p></p>
-					<Rule :rule="rule" v-for="rule in rules"></Rule>
+					<Rule :rule="rule" :id="rule.id" @rmItem="rm" v-for="rule in rules" @></Rule>
 				</div>
 		  	</el-col>
 		  	<el-col :span="10">
@@ -27,13 +29,13 @@
 </template>
 <script>
 	import Rule from '../components/rule.vue'
-	import { Tpl, DataTypeEnum } from '../utils/rule'
+	import { getTpl, DataTypeEnum } from '../utils/rule'
 	/**
 	 * 获取规则模板
 	 * @return {[type]} [description]
 	 */
 	function getRuleTpl() {
-		return JSON.parse(JSON.stringify(Tpl))
+		return JSON.parse(JSON.stringify(getTpl()))
 	}
 	export default {
 		components: {
@@ -41,7 +43,7 @@
 		},
 		data () {
 			return {
-				rules: setTestData()//[getRuleTpl()]
+				rules: [getRuleTpl()]
 			}
 		},
 		methods: {
@@ -128,6 +130,12 @@
 				return object.map(rule => {
 					return JSON.stringify(rule)
 				})
+			},
+			test () {
+				this.rules = setTestData()
+			},
+			rm (id) {
+				this.rules.splice(this.rules.findIndex(item => item.id === id), 1)
 			}
 		}
 	}
@@ -179,7 +187,7 @@
 					})
 					break
 			}
-			return Object.assign(JSON.parse(JSON.stringify(Tpl)), Object.assign(tpl, extend))
+			return Object.assign(getTpl(), Object.assign(tpl, extend))
 		})
 		return data
 	}

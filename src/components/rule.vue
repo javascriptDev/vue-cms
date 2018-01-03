@@ -30,6 +30,7 @@
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <span>Rule 字段: {{rule.field}}</span>
+                <i class="el-icon-delete" style="float: right; padding: 3px 0" @click='rm'></i>
             </div>
 
             <!-- 字段名 -->
@@ -188,7 +189,8 @@
             rule: {
                 type: Object,
                 default: Tpl
-            }
+            },
+            id: String
         },
         data () {
             return {
@@ -212,6 +214,9 @@
                 .forEach(item => {
                      me.rule.options[item] = ''
                 })
+            },
+            rm () {
+                this.$emit("rmItem", this.id)
             }
         }
     }

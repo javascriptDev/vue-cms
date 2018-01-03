@@ -3,6 +3,7 @@
  * 数据验证默认值
  */
 export const Tpl = {
+    id: guid(),
 	// 必须
   	required: true,
   	// 数据类型
@@ -38,6 +39,12 @@ export const Tpl = {
   	}
 };
 
+function guid() {
+    function S4() {
+        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
+    return (S4()+S4())
+}
 /**
  * 获取一个规则的模板，
  * @param  {模板数据} initData
@@ -45,8 +52,8 @@ export const Tpl = {
  */
 export const getTpl = (initData) => {
 	if (!initData)
-		return Tpl
-	return Object.assign(JSON.parse(JSON.stringify(Tpl)), initData)
+		return Object.assign(JSON.parse(JSON.stringify(Tpl)), {id: guid()})
+	return Object.assign(JSON.parse(JSON.stringify(Tpl)), initData, {id: guid()})
 }
 
 /**
