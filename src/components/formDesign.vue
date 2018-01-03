@@ -13,13 +13,17 @@
 				<div>
 					<el-button type="success" icon='el-icon-plus' @click='addField'>添加字段</el-button>
 					<el-button type="info" icon='el-icon-plus' @click='test'>测试</el-button>
+					<el-button type="info" icon='el-icon-plus' @click='test(1)'>same测试</el-button>
+					<el-button type="info" icon='el-icon-plus' @click='test(2)'>长度测试</el-button>
 
 					<p></p>
 					<Rule :rule="rule" :id="rule.id" @rmItem="rm" v-for="rule in rules" @></Rule>
 				</div>
 		  	</el-col>
 		  	<el-col :span="10">
-		  		<mu-appbar title="代码生成区">	</mu-appbar>
+		  		<mu-appbar title="代码生成区">
+					<el-button type="success" @click='copy'>复制到剪贴板</el-button>
+		  		</mu-appbar>
 				<mu-content-block :class="{'content':true,'active': true}">
 		           <pre v-highlightjs="getSource()"><code class="html"></code></pre>
 		        </mu-content-block>
@@ -47,6 +51,14 @@
 			}
 		},
 		methods: {
+			copy () {
+				var textField = document.createElement('textarea');
+			    textField.innerText = document.querySelector('.html').innerText;
+			    document.body.appendChild(textField);
+			    textField.select();
+			    document.execCommand('copy');
+			    textField.remove();
+			},
 			addField () {
 				this.rules.push(getRuleTpl())
 			},
@@ -59,7 +71,6 @@
 				let rules = this.rules.map(item => {
 					return me.generateRule(item, preFunc, addition)
 				})
-
 				// 添加附加函数
 				if (addition.length > 0) {
 					addition.forEach(item => {
@@ -88,12 +99,15 @@
 							data () {
 								${preFunc.join('')}
 								return {
-									rules: ${result}
+									rules: {
+										${result}
 									}
 								}
 							}
 						}
 					<\/script>`
+				// 去掉validator vlaue的引号
+				str = str.replace(/{"validator":(.*?)}/g, function(a, $1){return a.replace($1, $1.replace(/"/g, ''))})
 				return this.$prettyDom(str).replace(/\n\n/g, '\n').replace(/  /g, '    ')
 			},
 			/**
@@ -123,11 +137,19 @@
 						break
 					// 值相同
 					case 'same':
-						rules.push({
-							validator: `V${ruleData.field}`
-						})
 						let sameTo = this.rules.find(item => item.field == defaultOptions.same) || {field: '', options: {requiredErrorTxt: ''}}
+						rules.push({
+							validator: `V${ruleData.field}`,
+						})
 						let sameToField = defaultOptions.same
+						extend.type = sameTo.type || 'string'
+						if (sameTo.type === 'pattern') {
+							// 如果same to字段是正则，则把规则复制到当前字段。
+							extend = {
+								pattern: sameTo.options.pattern,
+								message: sameTo.options.patternErrorTxt
+							}
+						}
 						let pre = `
 						/*
 						 * 变量替换释义 : <el-form model={ruleForm} rules={rules} ref="form"></el-form>
@@ -166,11 +188,13 @@
 				// 长度处理
 				if (ruleData.len == 'len') {
 					rules.push({
+						type: ruleData.type,
 						len: defaultOptions.len,
 						message: defaultOptions.lenErrorTxt
 					})
 				} else if(ruleData.len === 'min,max') {
 					rules.push({
+						type: ruleData.type,
 						min: defaultOptions.min,
 						max: defaultOptions.max,
 						message: defaultOptions.lenErrorTxt
@@ -186,10 +210,58 @@
 				let result = []
 				let me = this
 				return object.map(rule => {
-					return JSON.stringify(rule)
+					// 去掉前后花括号.
+					return JSON.stringify(rule).replace(/^{(.*?)}$/, function(match, $1){
+						return $1 + ','
+					})
 				})
 			},
-			test () {
+			test (type) {
+				if (type == 1) {
+					this.rules = [Object.assign(getTpl(), {
+						type: 'string',
+						field: 'pwd',
+						required: true,
+						options: {
+							requiredErrorTxt: '密码不能为空'
+						}
+					}), Object.assign(getTpl(), {
+						type: 'same',
+						field: 'repwd',
+						required: true,
+						options: {
+							requiredErrorTxt: '再次密码不能为空',
+							same: 'pwd',
+							sameErrorTxt: '两次密码不一样。'
+						}
+					})]
+					return
+				} else if (type === 2) {
+					this.rules = [Object.assign(getTpl(), {
+						type: 'string',
+						field: 'name',
+						required: true,
+						len: 'len',
+						options: {
+							len: 3,
+							requiredErrorTxt: '密码不能为空',
+							lenErrorTxt: '长度错误'
+						}
+					}), Object.assign(getTpl(), {
+						type: 'string',
+						field: 'mail',
+						required: true,
+						len: 'min,max',
+						options: {
+							min: 1,
+							max: 4,
+							requiredErrorTxt: '再次密码不能为空',
+							lenErrorTxt: '长度错误'
+						}
+					})]
+					return
+				}
+
 				this.rules = setTestData()
 			},
 			rm (id) {

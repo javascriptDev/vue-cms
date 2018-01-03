@@ -12,6 +12,9 @@
 		 <mu-paper class="block" :zDepth="2" >
 		 	<router-link :to="{name: 'tableDesign'}">表格设计器</router-link>
 		</mu-paper>
+		<mu-paper class="block" :zDepth="2" >
+		 	<router-link :to="{name: 'test'}">测试表单规则</router-link>
+		</mu-paper>
 	</div>
 </template>
 <style lang="css">

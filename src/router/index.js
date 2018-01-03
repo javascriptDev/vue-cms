@@ -6,6 +6,7 @@ const Main = () => import('@/components/main')
 const FormDesign = () => import('@/components/formDesign')
 const TableDesign = () => import('@/components/tableDesign')
 const Index = () => import('@/components/index')
+const Test = () => import('@/components/test')
 
 export default new Router({
     routes: [{
@@ -21,8 +22,12 @@ export default new Router({
         name: 'tableDesign',
         component: TableDesign
     }, {
-        path: 'main',
+        path: '/main',
         name: 'main',
         component: Main
+    }, {
+        path: '/test',
+        name: 'test',
+        component: Test
     }]
 })

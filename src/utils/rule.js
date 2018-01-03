@@ -77,7 +77,7 @@ export const DataTypeEnum = [
         value: 'pattern'
     },  {
         type: '整型',
-        value: 'interger'
+        value: 'integer'
     }, {
         type: '浮点型',
         value: 'float'
