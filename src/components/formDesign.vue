@@ -52,10 +52,35 @@
 			},
 			getSource () {
 				let me = this
+				// 如果是自定义函数或者same as 需要在data return 之前添加一个自定义函数,
 				let preFunc = []
+				// 如果是数据类型是 same as, 还需要在same to 字段验证规则中添加一个 validator 验证规则。
+				let addition = []
 				let rules = this.rules.map(item => {
-					return me.generateRule(item, preFunc)
+					return me.generateRule(item, preFunc, addition)
 				})
+
+				// 添加附加函数
+				if (addition.length > 0) {
+					addition.forEach(item => {
+						let sameToField = item.field
+						// 验证字段中是否包含 same To 的字段
+						let hasRule = false
+						rules.forEach(r => {
+							let field = Object.keys(r)[0]
+							if (field == sameToField) {
+								hasRule = true
+								r[field].push(item.rule)
+							}
+						})
+						if (!hasRule) {
+							let obj = {}
+							obj[sameToField] = [{ validator: `V${sameToField}` }]
+							rules.push(obj)
+						}
+					})
+				}
+				// 转换格式。
 				let result = this.convert(rules).join('\n')
 				let str = `
 					<script>
@@ -74,7 +99,7 @@
 			/**
 			 * 生成单个规则
 			 */
-			generateRule (ruleData, preFunc) {
+			generateRule (ruleData, preFunc, additionArr) {
 				let rules = []
 				// 需要检查的属性
 				let checkKey = ['type', 'len', 'same', 'pattern']
@@ -98,9 +123,42 @@
 						break
 					// 值相同
 					case 'same':
-						extend = {
-							validator: ''
+						rules.push({
+							validator: `V${ruleData.field}`
+						})
+						let sameTo = this.rules.find(item => item.field == defaultOptions.same) || {field: '', options: {requiredErrorTxt: ''}}
+						let sameToField = defaultOptions.same
+						let pre = `
+						/*
+						 * 变量替换释义 : <el-form model={ruleForm} rules={rules} ref="form"></el-form>
+						 * 自动生成的代码需要替换如下字段
+						 *
+						 * YOUR_FORM_REFERENCE   -> form
+						 * YOUR_FORM_KEY_IN_DATA   -> ruleForm
+						 */
+						const V${ruleData.field} = (rule, value, callback) => {
+							if (value === '') {
+								callback(new Error('${defaultOptions.requiredErrorTxt}'))
+							} else {
+                        		this.$refs.YOUR_FORM_REFERENCE.validateField('${defaultOptions.same}')
+							}
+							callback()
 						}
+						const V${sameToField} = (rule, value, callback) => {
+			                if (value === '') {
+			                    callback(new Error('${sameTo.options.requiredErrorTxt}'))
+			                } else if (value !== this.YOUR_FORM_KEY_IN_DATA.${ruleData.field}) {
+			                    callback(new Error('${defaultOptions.sameErrorTxt}'))
+			                } else {
+			                    callback()
+			                }
+			            }`
+
+						preFunc.push(pre)
+						additionArr.push({
+							field: sameToField,
+							rule: {validator: `V${sameToField}`}
+						})
 						break
 				}
 				rules.push(Object.assign(rule, extend))
